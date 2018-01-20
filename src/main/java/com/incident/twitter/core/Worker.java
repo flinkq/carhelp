@@ -43,13 +43,13 @@ public class Worker {
         props.setProperty(TwitterSource.TOKEN_SECRET, "CNKMIQgZ7ijErrKqY3MIOnpAu7rzBh0eyt7JWo79upnoH");
 //        DataStream<String> streamSource = env.addSource(new TwitterSource(props));
 
-//        TweetFilter filter = new TweetFilter();
-//        TwitterSource source = new TwitterSource(props);
-//        source.setCustomEndpointInitializer(filter);
-
-        TMCLebanonFilter filter = new TMCLebanonFilter();
+        TweetFilter filter = new TweetFilter();
         TwitterSource source = new TwitterSource(props);
         source.setCustomEndpointInitializer(filter);
+
+//        TMCLebanonFilter filter = new TMCLebanonFilter();
+//        TwitterSource source = new TwitterSource(props);
+//        source.setCustomEndpointInitializer(filter);
 
         DataStream<String> streamSource = env.addSource(source);
 
@@ -73,7 +73,7 @@ public class Worker {
 
             @Override
             public String getKeyFromData(String o) {
-                return "sm:flink:tweets:tmc";
+                return "sm:flink:tweets:trump";
             }
 
             @Override
@@ -83,16 +83,16 @@ public class Worker {
         }));
 
         env.execute("Twitter Streaming Example");
-
-
     }
 
     public static class TweetFilter implements TwitterSource.EndpointInitializer, Serializable {
         @Override
         public StreamingEndpoint createEndpoint() {
             StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint();
-            endpoint.trackTerms(Arrays.asList("NASA", "Discovery", "Interstellar"));
-            return endpoint;
+//            endpoint.trackTerms(Arrays.asList("NASA", "Discovery", "Interstellar"));
+//            endpoint.trackTerms(Arrays.asList("Collision", "Car", "Crash"));
+            endpoint.followings(Arrays.asList(25073877L));
+            return endpoint; //ok?yea
         }
     }
 
