@@ -2,6 +2,7 @@ package com.incident.twitter.model;
 
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public class Tweet {
@@ -10,6 +11,7 @@ public class Tweet {
     private String tweet;
     private TwitterProfile twitterProfile;
     private Set<String> hashtags;
+    private Location accidentLocaiton;
 
     public Tweet(Instant createdAt, Long id, String tweet, TwitterProfile twitterProfile) {
         setCreatedAt(createdAt);
@@ -59,5 +61,13 @@ public class Tweet {
 
     public void setHashtags(Set<String> hashtags) {
         this.hashtags = hashtags;
+    }
+
+    public Optional<Location> getAccidentLocaiton() {
+        return Optional.ofNullable(accidentLocaiton);
+    }
+
+    public void setAccidentLocaiton(Location accidentLocaiton) {
+        this.accidentLocaiton = accidentLocaiton;
     }
 }

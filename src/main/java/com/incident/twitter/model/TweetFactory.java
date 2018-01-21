@@ -2,7 +2,6 @@ package com.incident.twitter.model;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.mortbay.util.ajax.JSON;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
