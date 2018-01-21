@@ -65,9 +65,6 @@
     <orderEntry type="library" name="Maven: com.data-artisans:flakka-slf4j_2.10:2.3-custom" level="project" />
     <orderEntry type="library" name="Maven: org.clapper:grizzled-slf4j_2.10:1.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.github.scopt:scopt_2.10:3.2.0" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.7.4" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.7.4" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.7.0" level="project" />
     <orderEntry type="library" name="Maven: com.twitter:chill_2.10:0.7.4" level="project" />
     <orderEntry type="library" name="Maven: com.twitter:chill-java:0.7.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.sling:org.apache.sling.commons.json:2.0.6" level="project" />
@@ -77,7 +74,12 @@
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.7" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
     <orderEntry type="library" name="Maven: org.apache.flink:flink-connector-twitter_2.10:1.3.2" level="project" />
-    <orderEntry type="library" name="Maven: com.vaadin.external.google:android-json:0.0.20131108.vaadin1" level="project" />
+    <orderEntry type="library" name="Maven: org.json:json:20171018" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.bahir:flink-connector-redis_2.10:1.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.apache.flink:flink-streaming-java_2.11:1.3.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.flink:flink-runtime_2.11:1.3.0" level="project" />

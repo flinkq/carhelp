@@ -1,5 +1,9 @@
 package com.incident.twitter.core;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.incident.twitter.model.Tweet;
+import com.incident.twitter.model.TweetFactory;
+import com.incident.twitter.util.ObjectMapperFactory;
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.endpoint.StreamingEndpoint;
 import org.apache.commons.lang.StringUtils;
@@ -37,19 +41,14 @@ public class Worker {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         Properties props = new Properties();
-        props.setProperty(TwitterSource.CONSUMER_KEY, "hKFcfe1eZkBHqTrmUhO84mRtL");
-        props.setProperty(TwitterSource.CONSUMER_SECRET, "i7yB0NejleSyMNCLV3Opow87ENO38dJkqeqNvkMdtMBA9afEf8");
-        props.setProperty(TwitterSource.TOKEN, "610785462-bM2EYRGMVHNYrgSYOtsJnCgZui5yyBLwPNd6HWzS");
-        props.setProperty(TwitterSource.TOKEN_SECRET, "CNKMIQgZ7ijErrKqY3MIOnpAu7rzBh0eyt7JWo79upnoH");
+        props.setProperty(TwitterSource.CONSUMER_KEY, "PNB7I9WfZHiCgSIl0RfZZ9Eqv");
+        props.setProperty(TwitterSource.CONSUMER_SECRET, "dOyRZCdta5BGWwhGhjyfKQMV7fbT0Oi4Uifm8r82RnInpua45w");
+        props.setProperty(TwitterSource.TOKEN, "1283394614-QkF3rjFqU3JwSoththtl1pDdYRBK77gMwoJFiTZ");
+        props.setProperty(TwitterSource.TOKEN_SECRET, "d08V9Hwe7NnfdJB6tI8N6XjdXKS1rs5DItR5T8FDkb5qY");
 //        DataStream<String> streamSource = env.addSource(new TwitterSource(props));
 
-        TweetFilter filter = new TweetFilter();
         TwitterSource source = new TwitterSource(props);
-        source.setCustomEndpointInitializer(filter);
-
-//        TMCLebanonFilter filter = new TMCLebanonFilter();
-//        TwitterSource source = new TwitterSource(props);
-//        source.setCustomEndpointInitializer(filter);
+        source.setCustomEndpointInitializer(new TMCLebanonFilter());
 
         DataStream<String> streamSource = env.addSource(source);
 
@@ -58,30 +57,30 @@ public class Worker {
         FlinkJedisPoolConfig conf = new FlinkJedisPoolConfig.Builder().setHost("127.0.0.1").build();
 
         streamSource
-                .filter(new FilterFunction<String>() {
-                    @Override
-                    public boolean filter(String value) throws Exception {
-                        return value != null && !StringUtils.isEmpty(value) && !StringUtils.isWhitespace(value) && isJSONValid(value);
-                    }
-                })
-//                .map(ss -> new org.json.JSONObject(ss).getString("body"))
-                .addSink(new RedisSink<String>(conf, new RedisMapper<String>() {
+                .filter(twitterStr -> twitterStr != null && !twitterStr.trim().isEmpty() && isJSONValid(twitterStr))
+                .map(twitterStr -> new JSONObject(twitterStr))
+                .filter(twitterJson -> twitterJson.optLong("timestamp_ms") != 0)
+                .map(TweetFactory::build)
+                .addSink(new RedisSink<Tweet>(conf, new RedisMapper<Tweet>() {
             @Override
             public RedisCommandDescription getCommandDescription() {
                 return new RedisCommandDescription(RedisCommand.LPUSH);
             }
 
             @Override
-            public String getKeyFromData(String o) {
-                return "sm:flink:tweets:trump";
+            public String getKeyFromData(Tweet tweet) {
+                return "sm:flink:tweets:" + tweet.getTwitterProfile().getHandle();
             }
 
             @Override
-            public String getValueFromData(String o) {
-                return o;
+            public String getValueFromData(Tweet tweet) {
+                try {
+                    return ObjectMapperFactory.getObjectMapper().writeValueAsString(tweet);
+                } catch (JsonProcessingException e) {
+                    return "Error serializing tweet " + tweet.getId();
+                }
             }
         }));
-
         env.execute("Twitter Streaming Example");
     }
 
