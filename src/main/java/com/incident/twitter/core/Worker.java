@@ -38,6 +38,8 @@ import java.util.*;
 public class Worker {
     private static final String elasticHost = "localhost";
     private static final String elasticCluster = "elasticsearch_issakhoury";
+    private static final FlinkJedisPoolConfig conf = new FlinkJedisPoolConfig.Builder().setHost("127.0.0.1").build();
+
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
@@ -92,7 +94,6 @@ public class Worker {
         }
     }
     private static void addRedisRawSink(DataStream<JSONObject> rawStream){
-        FlinkJedisPoolConfig conf = new FlinkJedisPoolConfig.Builder().setHost("127.0.0.1").build();
         rawStream .addSink(new RedisSink<>(conf, new RedisMapper<JSONObject>() {
             @Override
             public RedisCommandDescription getCommandDescription() {
@@ -111,7 +112,6 @@ public class Worker {
         }));
     }
     private static void addRedisEnrichedSink(DataStream<Tweet> enrichedStream){
-        FlinkJedisPoolConfig conf = new FlinkJedisPoolConfig.Builder().setHost("127.0.0.1").build();
         enrichedStream.addSink(new RedisSink<>(conf, new RedisMapper<Tweet>() {
             @Override
             public RedisCommandDescription getCommandDescription() {
