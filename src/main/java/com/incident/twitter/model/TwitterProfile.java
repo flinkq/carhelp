@@ -1,0 +1,27 @@
+package com.incident.twitter.model;
+
+public class TwitterProfile {
+    private Long id;
+    private String handle;
+
+    public TwitterProfile(Long id, String handle) {
+        setId(id);
+        setHandle(handle);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getHandle() {
+        return handle;
+    }
+
+    public void setHandle(String handle) {
+        this.handle = handle;
+    }
+}
