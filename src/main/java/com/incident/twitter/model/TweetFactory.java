@@ -28,7 +28,14 @@ public class TweetFactory {
         return twitterJson.getLong("id");
     }
     private static String parseTweet(JSONObject twitterJson){
-        return twitterJson.getString("text").trim();
+        String tweet;
+        try{
+            tweet = twitterJson.getJSONObject("extended_tweet")
+                    .getString("full_text").trim();
+        }catch (JSONException e){
+            tweet = twitterJson.getString("text").trim();
+        }
+        return tweet;
     }
     private static Set<String> parseHashtags(JSONObject twitterJson){
         Set<String> hashtags = new HashSet<>();
