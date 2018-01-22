@@ -6,38 +6,28 @@ import com.incident.twitter.model.Tweet;
 import com.incident.twitter.model.TweetFactory;
 import com.incident.twitter.service.LocationService;
 import com.incident.twitter.service.impl.GoogleLocationService;
+import com.incident.twitter.util.ElasticUtils;
 import com.incident.twitter.util.ObjectMapperFactory;
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.endpoint.StreamingEndpoint;
-import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.streaming.api.collector.selector.OutputSelector;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SplitStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.connectors.elasticsearch.ElasticsearchSink;
-import org.apache.flink.streaming.connectors.elasticsearch.ElasticsearchSinkFunction;
-import org.apache.flink.streaming.connectors.elasticsearch.RequestIndexer;
 import org.apache.flink.streaming.connectors.redis.RedisSink;
 import org.apache.flink.streaming.connectors.redis.common.config.FlinkJedisPoolConfig;
 import org.apache.flink.streaming.connectors.redis.common.mapper.RedisCommand;
 import org.apache.flink.streaming.connectors.redis.common.mapper.RedisCommandDescription;
 import org.apache.flink.streaming.connectors.redis.common.mapper.RedisMapper;
 import org.apache.flink.streaming.connectors.twitter.TwitterSource;
-import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.client.Requests;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
-import org.elasticsearch.common.transport.TransportAddress;
 import org.json.JSONObject;
-import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.*;
 
 public class Worker {
-    private static final String elasticHost = "localhost";
-    private static final String elasticCluster = "elasticsearch_issakhoury";
+    private static final String elasticHost = "ovh";
+    private static final String elasticCluster = "test-cluster";
     private static final FlinkJedisPoolConfig conf = new FlinkJedisPoolConfig.Builder().setHost("127.0.0.1").build();
 
     public static void main(String[] args) throws Exception {
@@ -77,10 +67,10 @@ public class Worker {
 //                .filter(tweet -> tweet.getAccidentLocaiton().isPresent());
 
         DataStream<JSONObject> rawStream = twitterSplitStream.select("raw");
-//        addRedisEnrichedSink(enrichedStream);
+        rawStream.map(JSONObject::toMap).addSink(ElasticUtils.getElasticSink("twitter", "tweets"));
+        rawStream.map(JSONObject::toMap).addSink(ElasticUtils.getElasticSink("twitter", "raw"));
+
         addRedisRawSink(rawStream);
-        addElasticRawSink(rawStream);
-//        addElasticEnrichedSink(enrichedStream);
 
         env.execute("Twitter Streaming Example");
     }
@@ -133,57 +123,34 @@ public class Worker {
             }
         }));
     }
-    private static void addElasticRawSink(DataStream<JSONObject> rawStream) throws UnknownHostException {
-        Map<String, String> config = new HashMap<>();
-        config.put("cluster.name", elasticCluster);
-        // This instructs the sink to emit after every element, otherwise they would be buffered
-        config.put("bulk.flush.max.actions", "1");
-
-        List<TransportAddress> transportAddresses = new ArrayList<>();
-        transportAddresses.add(new InetSocketTransportAddress(InetAddress.getByName(elasticHost), 9300));
-
-        rawStream.addSink(new ElasticsearchSink<>(config, transportAddresses, new ElasticsearchSinkFunction<JSONObject>() {
-            public IndexRequest createIndexRequest(JSONObject element) {
-                return Requests.indexRequest()
-                        .index("twitter")
-                        .type("raw")
-                        .source(element.toString());
-            }
-
-            @Override
-            public void process(JSONObject element, RuntimeContext ctx, RequestIndexer indexer) {
-                indexer.add(createIndexRequest(element));
-            }
-        }));
-    }
-    private static void addElasticEnrichedSink(DataStream<Tweet> enrichedStream) throws UnknownHostException {
-        Map<String, String> config = new HashMap<>();
-        config.put("cluster.name", elasticCluster);
-        // This instructs the sink to emit after every element, otherwise they would be buffered
-        config.put("bulk.flush.max.actions", "1");
-
-        List<TransportAddress> transportAddresses = new ArrayList<>();
-        transportAddresses.add(new InetSocketTransportAddress(InetAddress.getByName(elasticHost), 9300));
-
-        enrichedStream.addSink(new ElasticsearchSink<>(config, transportAddresses, new ElasticsearchSinkFunction<Tweet>() {
-            public IndexRequest createIndexRequest(Tweet element) throws JsonProcessingException {
-                return Requests.indexRequest()
-                        .index("twitter")
-                        .type("enriched")
-                        .source(ObjectMapperFactory.getObjectMapper().writeValueAsString(element));
-            }
-
-            @Override
-            public void process(Tweet element, RuntimeContext ctx, RequestIndexer indexer) {
-                try {
-                    indexer.add(createIndexRequest(element));
-                } catch (JsonProcessingException e) {
-                    LoggerFactory.getLogger(this.getClass())
-                            .error("Failed to index tweet {} in elastic", element.getId(), e);
-                }
-            }
-        }));
-    }
+//    private static void addElasticEnrichedSink(DataStream<Tweet> enrichedStream) throws UnknownHostException {
+//        Map<String, String> config = new HashMap<>();
+//        config.put("cluster.name", elasticCluster);
+//        // This instructs the sink to emit after every element, otherwise they would be buffered
+//        config.put("bulk.flush.max.actions", "1");
+//
+//        List<TransportAddress> transportAddresses = new ArrayList<>();
+//        transportAddresses.add(new InetSocketTransportAddress(InetAddress.getByName(elasticHost), 9300));
+//
+//        enrichedStream.addSink(new ElasticsearchSink(config, transportAddresses, new ElasticsearchSinkFunction<Tweet>() {
+//            public IndexRequest createIndexRequest(Tweet element) throws JsonProcessingException {
+//                return Requests.indexRequest()
+//                        .index("twitter")
+//                        .type("enriched")
+//                        .source(ObjectMapperFactory.getObjectMapper().writeValueAsString(element));
+//            }
+//
+//            @Override
+//            public void process(Tweet element, RuntimeContext ctx, RequestIndexer indexer) {
+//                try {
+//                    indexer.add(createIndexRequest(element));
+//                } catch (JsonProcessingException e) {
+//                    LoggerFactory.getLogger(this.getClass())
+//                            .error("Failed to index tweet {} in elastic", element.getId(), e);
+//                }
+//            }
+//        }));
+//    }
 }
 
 
