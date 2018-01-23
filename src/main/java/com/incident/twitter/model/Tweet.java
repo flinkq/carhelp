@@ -8,15 +8,15 @@ import java.util.Set;
 public class Tweet {
     private Instant createdAt;
     private Long id;
-    private String tweet;
+    private String text;
     private TwitterProfile twitterProfile;
     private Set<String> hashtags;
     private Location accidentLocaiton;
 
-    public Tweet(Instant createdAt, Long id, String tweet, TwitterProfile twitterProfile) {
+    public Tweet(Instant createdAt, Long id, String text, TwitterProfile twitterProfile) {
         setCreatedAt(createdAt);
         setId(id);
-        setTweet(tweet);
+        setText(text);
         setTwitterProfile(twitterProfile);
     }
 
@@ -36,12 +36,12 @@ public class Tweet {
         this.id = id;
     }
 
-    public String getTweet() {
-        return tweet;
+    public String getText() {
+        return text;
     }
 
-    public void setTweet(String tweet) {
-        this.tweet = tweet;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public TwitterProfile getTwitterProfile() {

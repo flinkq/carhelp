@@ -10,6 +10,8 @@ import com.incident.twitter.util.ElasticUtils;
 import com.incident.twitter.util.ObjectMapperFactory;
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.endpoint.StreamingEndpoint;
+import org.apache.flink.api.common.typeinfo.TypeHint;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.streaming.api.collector.selector.OutputSelector;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SplitStream;
@@ -68,8 +70,10 @@ public class Worker {
 //                .filter(tweet -> tweet.getAccidentLocaiton().isPresent());
 
         DataStream<JSONObject> rawStream = twitterSplitStream.select("raw");
-        addRedisRawSink(rawStream);
-        addElasticRawSink(rawStream);
+//        addRedisRawSink(rawStream);
+//        addElasticRawSink(rawStream);
+//        addRedisEnrichedSink(enrichedStream);
+        addElasticEnrichedSink(enrichedStream);
         env.execute("Twitter Streaming Example");
     }
 
@@ -114,11 +118,18 @@ public class Worker {
         }));
     }
     private static void addElasticEnrichedSink(DataStream<Tweet> enrichedStream) throws UnknownHostException {
-        enrichedStream.map(tweet -> ObjectMapperFactory.getObjectMapper().writeValueAsString(tweet))
-                .addSink(ElasticUtils.getElasticSink("twitter", "enriched", elasticHost, elasticCluster));
+        enrichedStream
+                .map(tweet -> {
+                    return (HashMap<String, Object>)ObjectMapperFactory.getObjectMapper().convertValue(tweet, HashMap.class);
+                }).returns(new TypeHint<HashMap<String, Object>>() {
+            @Override
+            public TypeInformation<HashMap<String, Object>> getTypeInfo() {
+                return super.getTypeInfo();
+            }
+        }).addSink(ElasticUtils.getElasticSink("twitter", "enriched", elasticHost, elasticCluster));
     }
     private static void addElasticRawSink(DataStream<JSONObject> rawStream) throws UnknownHostException {
-        rawStream.map(JSONObject::toString)
+        rawStream.map(JSONObject::toMap)
                 .addSink(ElasticUtils.getElasticSink("twitter", "raw", elasticHost, elasticCluster));
     }
     public static class TMCLebanonFilter implements TwitterSource.EndpointInitializer, Serializable {

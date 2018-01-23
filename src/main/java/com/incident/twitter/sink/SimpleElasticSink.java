@@ -5,6 +5,7 @@ import org.apache.flink.streaming.connectors.elasticsearch.ElasticsearchSinkFunc
 import org.apache.flink.streaming.connectors.elasticsearch.RequestIndexer;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.Requests;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -21,6 +22,8 @@ public class SimpleElasticSink implements ElasticsearchSinkFunction<Map>
 
     public IndexRequest createIndexRequest(Map element)
     {
+        LoggerFactory.getLogger(this.getClass())
+                .info("INDEXING: {}", element);
 	return Requests.indexRequest().index(index).type(type).source(element);
     }
 
