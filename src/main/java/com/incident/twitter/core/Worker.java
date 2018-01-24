@@ -43,7 +43,7 @@ public class Worker {
         props.setProperty(TwitterSource.TOKEN_SECRET, "d08V9Hwe7NnfdJB6tI8N6XjdXKS1rs5DItR5T8FDkb5qY");
 
         TwitterSource source = new TwitterSource(props);
-//        source.setCustomEndpointInitializer(new TMCLebanonFilter());
+        source.setCustomEndpointInitializer(new TMCLebanonFilter());
         DataStream<String> streamSource = env.addSource(source);
         SplitStream<JSONObject> twitterSplitStream = streamSource
                 .filter(twitterStr -> twitterStr != null && !twitterStr.trim().isEmpty())
@@ -70,10 +70,10 @@ public class Worker {
 //                .filter(tweet -> tweet.getAccidentLocaiton().isPresent());
 
         DataStream<JSONObject> rawStream = twitterSplitStream.select("raw");
-//        addRedisRawSink(rawStream);
+        addRedisRawSink(rawStream);
 //        addElasticRawSink(rawStream);
-//        addRedisEnrichedSink(enrichedStream);
-//        addElasticEnrichedSink(enrichedStream);
+        addRedisEnrichedSink(enrichedStream);
+        addElasticEnrichedSink(enrichedStream);
         env.execute("Twitter Streaming Example");
     }
 
