@@ -73,7 +73,7 @@ public class Worker {
 //        addRedisRawSink(rawStream);
 //        addElasticRawSink(rawStream);
 //        addRedisEnrichedSink(enrichedStream);
-        addElasticEnrichedSink(enrichedStream);
+//        addElasticEnrichedSink(enrichedStream);
         env.execute("Twitter Streaming Example");
     }
 

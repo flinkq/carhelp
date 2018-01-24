@@ -24,7 +24,10 @@ public class SimpleElasticSink implements ElasticsearchSinkFunction<Map>
     {
         LoggerFactory.getLogger(this.getClass())
                 .info("INDEXING: {}", element);
-	return Requests.indexRequest().index(index).type(type).source(element);
+	return Requests.indexRequest().index(index)
+            .type(type)
+            .id(element.get("id").toString())
+            .source(element);
     }
 
     @Override public void process(Map element, RuntimeContext ctx, RequestIndexer indexer)
