@@ -22,6 +22,7 @@ import org.apache.flink.streaming.connectors.redis.common.mapper.RedisCommand;
 import org.apache.flink.streaming.connectors.redis.common.mapper.RedisCommandDescription;
 import org.apache.flink.streaming.connectors.redis.common.mapper.RedisMapper;
 import org.apache.flink.streaming.connectors.twitter.TwitterSource;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -46,7 +47,7 @@ public class Worker {
         source.setCustomEndpointInitializer(new TMCLebanonFilter());
         DataStream<String> streamSource = env.addSource(source);
         SplitStream<JSONObject> twitterSplitStream = streamSource
-                .filter(twitterStr -> twitterStr != null && !twitterStr.trim().isEmpty())
+                .filter(twitterStr -> twitterStr != null && !twitterStr.trim().isEmpty() && isValidJson(twitterStr))
                 .map(twitterStr -> new JSONObject(twitterStr))
                 .filter(twitterJson -> twitterJson.optLong("timestamp_ms") != 0)
                 .split(new OutputSelector<JSONObject>() {
@@ -138,6 +139,14 @@ public class Worker {
             StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint();
             endpoint.followings(Collections.singletonList(2236553426L));
             return endpoint;
+        }
+    }
+    private static boolean isValidJson(String twitterStr){
+        try{
+            new JSONObject(twitterStr);
+            return true;
+        }catch (JSONException e){
+            return false;
         }
     }
 }
