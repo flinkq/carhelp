@@ -161,6 +161,11 @@ under the License.
             <artifactId>org.apache.servicemix.bundles.jest</artifactId>
             <version>0.1.6_3-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.twilio.sdk</groupId>
+            <artifactId>twilio</artifactId>
+            <version>7.17.0</version>
+        </dependency>
     </dependencies>
 
     <profiles>

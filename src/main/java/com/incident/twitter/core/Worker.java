@@ -7,7 +7,8 @@ import com.incident.twitter.service.LocationService;
 import com.incident.twitter.service.impl.GoogleLocationService;
 import com.incident.twitter.util.ElasticUtils;
 import com.incident.twitter.util.ObjectMapperFactory;
-import com.incident.twitter.util.SlackAppender;
+import com.incident.twitter.util.SlackNotifier;
+import com.incident.twitter.util.TwilioNotifier;
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.endpoint.StreamingEndpoint;
 import org.apache.flink.api.common.typeinfo.TypeHint;
@@ -81,7 +82,10 @@ public class Worker
 			.map(tweet -> getLocations(tweet))
 			//we got the ones with location
 			.map(tweet -> {
-			    tweet.getAccidentLocaiton().ifPresent(location -> SlackAppender.append("Detected location " + location.getName()));
+			    tweet.getAccidentLocaiton().ifPresent(location -> {
+			    	SlackNotifier.notify("Detected location " + location.getName());
+					TwilioNotifier.notify("Detected accident at " + location.getName() + ", " + location.getCountry());
+				});
 			    return tweet;
 			});
 
@@ -116,7 +120,7 @@ public class Worker
 
 	    @Override public String getKeyFromData(JSONObject tweet)
 	    {
-		return "sm:flink:tweets:raw";
+		return "queue:tweets:raw";
 	    }
 
 	    @Override public String getValueFromData(JSONObject tweet)
@@ -137,7 +141,7 @@ public class Worker
 
 	    @Override public String getKeyFromData(Tweet tweet)
 	    {
-		StringBuilder key = new StringBuilder("sm:flink:tweets:enriched:" + tweet.getTwitterProfile().getHandle());
+		StringBuilder key = new StringBuilder("queue:tweets:enriched:" + tweet.getTwitterProfile().getHandle());
 		tweet.getAccidentLocaiton().ifPresent(location -> key.append(":").append(location.getName()));
 		return key.toString();
 	    }
