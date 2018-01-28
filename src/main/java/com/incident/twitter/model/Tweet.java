@@ -70,4 +70,10 @@ public class Tweet {
     public void setAccidentLocaiton(Location accidentLocaiton) {
         this.accidentLocaiton = accidentLocaiton;
     }
+
+    @Override public String toString()
+    {
+        return "Tweet{" + "createdAt=" + createdAt + ", id=" + id + ", text='" + text + '\'' + ", twitterProfile=" + twitterProfile + ", hashtags="
+                        + hashtags + ", accidentLocaiton=" + accidentLocaiton + '}';
+    }
 }

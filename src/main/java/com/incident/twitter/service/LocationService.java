@@ -2,9 +2,9 @@ package com.incident.twitter.service;
 
 import com.incident.twitter.model.Location;
 
-import java.util.Collection;
 import java.util.Optional;
 
-public interface LocationService {
-    Optional<Location> detectLocation(Collection<String> hashtags);
+public interface LocationService
+{
+    Optional<Location> detectLocation(String hashtag);
 }
