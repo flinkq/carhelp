@@ -1,9 +1,9 @@
 package com.incident.twitter.service.impl;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
+import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
 import com.incident.twitter.model.Location;
 import com.incident.twitter.service.LocationService;
@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import redis.clients.jedis.Jedis;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executors;
@@ -25,6 +26,7 @@ public class GoogleLocationService implements LocationService
     Logger logger = Logger.getLogger(this.getClass());
 
     private static GoogleLocationService helper;
+    private static Gson gson = new Gson();
     private String apiKey;
     private String queueName;
     private ScheduledExecutorService scheduler;
@@ -59,46 +61,50 @@ public class GoogleLocationService implements LocationService
     @Override public Optional<Location> detectLocation(String hashtag)
     {
         logger.info("Detecting location for " + hashtag);
+        Optional<Location> result = Optional.empty();
         if(isLocation(hashtag))
 	{
 	    String location = getFromCache(hashtag);
 	    if (location == null)
 	    {
 		logger.info(hashtag + " not found in cache... calling google");
-		GeoApiContext context = new GeoApiContext.Builder().apiKey("AIzaSyD-IsobBghjtWs6N7dv9s8iip9ZBpTLGek").build();
-		GeocodingResult[] results = new GeocodingResult[0];
-		try
+
+			try
 		{
-		    results = GeocodingApi.geocode(context, hashtag).language("ar").await();
-		    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		    location = gson.toJson(results[0]);
-		    logger.trace("Got response for " + hashtag + " " + results[0]);
-		    setInCache(hashtag, location);
+			GeocodingResult[] results = requestLocationFromGoogle(hashtag);
+			location = gson.toJson(results[0]);
+			setInCache(hashtag, location);
 		} catch (Exception exc)
 		{
 		    addBadLocation(hashtag);
-		    logger.error("Could not get google response for " + hashtag + ": " + exc.toString());
-		    return Optional.empty();
+		    logger.debug(hashtag + " got no results from google: " + exc.toString());
 		}
 	    } else
 	    {
 		logger.info("Found " + hashtag + " in cache");
 	    }
-	    try
-	    {
-		return Optional.of(toLocation(location, hashtag));
-	    } catch (JSONException e)
-	    {
-	        //addBadLocation(hashtag);
-		logger.error("Could not parse google location response for " + hashtag + " : " + location, e);
-	    }
+	    if (location != null){
+			try
+			{
+				result = Optional.of(toLocation(location, hashtag));
+				logger.info("Found " + result.get().getName() + " in " + result.get().getCountry());
+			} catch (JSONException e)
+			{
+				logger.error("Could not parse google location response for " + hashtag + " : " + location, e);
+			}
+		}
 	}else
 	{
-	    logger.info("Already know that " + hashtag + " in not a location");
+	    logger.info("Bad location " + hashtag);
 	}
-	return Optional.empty();
+	return result;
     }
-
+	private GeocodingResult[] requestLocationFromGoogle(String hashtag) throws InterruptedException, ApiException, IOException {
+		GeoApiContext context = new GeoApiContext.Builder().apiKey("AIzaSyD-IsobBghjtWs6N7dv9s8iip9ZBpTLGek").build();
+		GeocodingResult[] results = GeocodingApi.geocode(context, hashtag).language("ar").await();
+		logger.trace("Got response for " + hashtag + " " + gson.toJson(results));
+		return results;
+	}
     private Location toLocation(String response, String hashtag)
     {
         logger.debug("Parsing location response " + response);

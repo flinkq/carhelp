@@ -47,15 +47,15 @@ public class Worker
 	StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
 	Properties props = new Properties();
-	props.setProperty(TwitterSource.CONSUMER_KEY, "PNB7I9WfZHiCgSIl0RfZZ9Eqv");
-	props.setProperty(TwitterSource.CONSUMER_SECRET, "dOyRZCdta5BGWwhGhjyfKQMV7fbT0Oi4Uifm8r82RnInpua45w");
-	props.setProperty(TwitterSource.TOKEN, "1283394614-QkF3rjFqU3JwSoththtl1pDdYRBK77gMwoJFiTZ");
-	props.setProperty(TwitterSource.TOKEN_SECRET, "d08V9Hwe7NnfdJB6tI8N6XjdXKS1rs5DItR5T8FDkb5qY");
+	props.setProperty(TwitterSource.CONSUMER_KEY, "uKmcgkE23seCff5uQntFhIrAU");
+	props.setProperty(TwitterSource.CONSUMER_SECRET, "uW3Po4AtzpNxFvhRrExxIShkSHw9on1xe1VfW7a34eIy43fb2b");
+	props.setProperty(TwitterSource.TOKEN, "1283394614-dq01NwcHWIxVYFgkZTtdrJapdyLJznpaLeJ5LOr");
+	props.setProperty(TwitterSource.TOKEN_SECRET, "fgZR4X7FQQH56PsbtZfNaiPajYOUrA185pgU9GTNbWOEu");
 
 	TwitterSource source = new TwitterSource(props);
 	source.setCustomEndpointInitializer(new TMCLebanonFilter());
 	DataStream<String> streamSource = env.addSource(source);
-	streamSource.print();
+//	streamSource.print();
 	//filters
 	SplitStream<JSONObject> twitterSplitStream = streamSource
 			.filter(twitterStr -> twitterStr != null && !twitterStr.trim().isEmpty() && isValidJson(twitterStr))
@@ -75,16 +75,16 @@ public class Worker
 	//
 	DataStream<Tweet> enrichedStream = twitterSplitStream
 			.select("enriched")
-			.map(TweetFactory::build); //building tweet
-	enrichedStream.print();
-
-	enrichedStream.filter(tweet -> tweet.getHashtags().contains("كفانا_بقى") || tweet.getText().contains("كفانا_بقى")) //this hashtag means accident
+			.map(TweetFactory::build) //building tweet
+	        .filter(tweet -> tweet.getHashtags().contains("كفانا_بقى") || tweet.getText().contains("كفانا_بقى")) //this hashtag means accident
 			.map(tweet -> getLocations(tweet))
 			//we got the ones with location
 			.map(tweet -> {
 			    tweet.getAccidentLocaiton().ifPresent(location -> {
 			    	SlackNotifier.notify("Detected location " + location.getName());
-					TwilioNotifier.notify("Detected accident at " + location.getName() + ", " + location.getCountry());
+			    	try{
+						TwilioNotifier.notify("Detected accident at " + location.getName() + ", " + location.getCountry());
+					}catch (Exception e){}
 				});
 			    return tweet;
 			});
@@ -106,6 +106,7 @@ public class Worker
 			.findAny()
 			.map(Optional::get)
 			.ifPresent(tweet::setAccidentLocaiton);
+	tweet.getAccidentLocaiton().ifPresent(location -> logger.debug("Found accident location " + location.getName()));
 	return tweet;
     }
 
