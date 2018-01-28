@@ -13,14 +13,14 @@ import java.util.Map;
 
 public class ElasticUtils
 {
-    public static ElasticsearchSink getElasticSink(String index, String type) throws UnknownHostException
+    public static ElasticsearchSink getElasticSink(String index, String type, String elasticHost, String elasticCluster) throws UnknownHostException
     {
 	Map<String, String> config = new HashMap<>();
-	config.put("cluster.name", "test-cluster");
+	config.put("cluster.name", elasticCluster);
 	// This instructs the sink to emit after every element, otherwise they would be buffered
 	config.put("bulk.flush.max.actions", "1");
 	List<InetSocketAddress> transportAddresses = new ArrayList<>();
-	transportAddresses.add(new InetSocketAddress(InetAddress.getByName("ovh"), 9300));
+	transportAddresses.add(new InetSocketAddress(InetAddress.getByName(elasticHost), 9300));
 	return new ElasticsearchSink(config, transportAddresses, new SimpleElasticSink(index, type));
     }
 

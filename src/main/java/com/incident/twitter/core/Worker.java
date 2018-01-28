@@ -10,6 +10,8 @@ import com.incident.twitter.util.ElasticUtils;
 import com.incident.twitter.util.ObjectMapperFactory;
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.endpoint.StreamingEndpoint;
+import org.apache.flink.api.common.typeinfo.TypeHint;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.streaming.api.collector.selector.OutputSelector;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SplitStream;
@@ -20,13 +22,15 @@ import org.apache.flink.streaming.connectors.redis.common.mapper.RedisCommand;
 import org.apache.flink.streaming.connectors.redis.common.mapper.RedisCommandDescription;
 import org.apache.flink.streaming.connectors.redis.common.mapper.RedisMapper;
 import org.apache.flink.streaming.connectors.twitter.TwitterSource;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.net.UnknownHostException;
 import java.util.*;
 
 public class Worker {
-    private static final String elasticHost = "ovh";
+    private static final String elasticHost = "142.44.243.86";
     private static final String elasticCluster = "test-cluster";
     private static final FlinkJedisPoolConfig conf = new FlinkJedisPoolConfig.Builder().setHost("127.0.0.1").build();
 
@@ -40,10 +44,10 @@ public class Worker {
         props.setProperty(TwitterSource.TOKEN_SECRET, "d08V9Hwe7NnfdJB6tI8N6XjdXKS1rs5DItR5T8FDkb5qY");
 
         TwitterSource source = new TwitterSource(props);
-//        source.setCustomEndpointInitializer(new TMCLebanonFilter());
+        source.setCustomEndpointInitializer(new TMCLebanonFilter());
         DataStream<String> streamSource = env.addSource(source);
         SplitStream<JSONObject> twitterSplitStream = streamSource
-                .filter(twitterStr -> twitterStr != null && !twitterStr.trim().isEmpty())
+                .filter(twitterStr -> twitterStr != null && !twitterStr.trim().isEmpty() && isValidJson(twitterStr))
                 .map(twitterStr -> new JSONObject(twitterStr))
                 .filter(twitterJson -> twitterJson.optLong("timestamp_ms") != 0)
                 .split(new OutputSelector<JSONObject>() {
@@ -67,22 +71,13 @@ public class Worker {
 //                .filter(tweet -> tweet.getAccidentLocaiton().isPresent());
 
         DataStream<JSONObject> rawStream = twitterSplitStream.select("raw");
-        rawStream.map(JSONObject::toMap).addSink(ElasticUtils.getElasticSink("twitter", "tweets"));
-        rawStream.map(JSONObject::toMap).addSink(ElasticUtils.getElasticSink("twitter", "raw"));
-
         addRedisRawSink(rawStream);
-
+//        addElasticRawSink(rawStream);
+        addRedisEnrichedSink(enrichedStream);
+        addElasticEnrichedSink(enrichedStream);
         env.execute("Twitter Streaming Example");
     }
 
-    public static class TMCLebanonFilter implements TwitterSource.EndpointInitializer, Serializable {
-        @Override
-        public StreamingEndpoint createEndpoint() {
-            StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint();
-            endpoint.followings(Collections.singletonList(2236553426L));
-            return endpoint;
-        }
-    }
     private static void addRedisRawSink(DataStream<JSONObject> rawStream){
         rawStream .addSink(new RedisSink<>(conf, new RedisMapper<JSONObject>() {
             @Override
@@ -123,34 +118,37 @@ public class Worker {
             }
         }));
     }
-//    private static void addElasticEnrichedSink(DataStream<Tweet> enrichedStream) throws UnknownHostException {
-//        Map<String, String> config = new HashMap<>();
-//        config.put("cluster.name", elasticCluster);
-//        // This instructs the sink to emit after every element, otherwise they would be buffered
-//        config.put("bulk.flush.max.actions", "1");
-//
-//        List<TransportAddress> transportAddresses = new ArrayList<>();
-//        transportAddresses.add(new InetSocketTransportAddress(InetAddress.getByName(elasticHost), 9300));
-//
-//        enrichedStream.addSink(new ElasticsearchSink(config, transportAddresses, new ElasticsearchSinkFunction<Tweet>() {
-//            public IndexRequest createIndexRequest(Tweet element) throws JsonProcessingException {
-//                return Requests.indexRequest()
-//                        .index("twitter")
-//                        .type("enriched")
-//                        .source(ObjectMapperFactory.getObjectMapper().writeValueAsString(element));
-//            }
-//
-//            @Override
-//            public void process(Tweet element, RuntimeContext ctx, RequestIndexer indexer) {
-//                try {
-//                    indexer.add(createIndexRequest(element));
-//                } catch (JsonProcessingException e) {
-//                    LoggerFactory.getLogger(this.getClass())
-//                            .error("Failed to index tweet {} in elastic", element.getId(), e);
-//                }
-//            }
-//        }));
-//    }
+    private static void addElasticEnrichedSink(DataStream<Tweet> enrichedStream) throws UnknownHostException {
+        enrichedStream
+                .map(tweet -> {
+                    return (HashMap<String, Object>)ObjectMapperFactory.getObjectMapper().convertValue(tweet, HashMap.class);
+                }).returns(new TypeHint<HashMap<String, Object>>() {
+            @Override
+            public TypeInformation<HashMap<String, Object>> getTypeInfo() {
+                return super.getTypeInfo();
+            }
+        }).addSink(ElasticUtils.getElasticSink("twitter", "enriched", elasticHost, elasticCluster));
+    }
+    private static void addElasticRawSink(DataStream<JSONObject> rawStream) throws UnknownHostException {
+        rawStream.map(JSONObject::toMap)
+                .addSink(ElasticUtils.getElasticSink("twitter", "raw", elasticHost, elasticCluster));
+    }
+    public static class TMCLebanonFilter implements TwitterSource.EndpointInitializer, Serializable {
+        @Override
+        public StreamingEndpoint createEndpoint() {
+            StatusesFilterEndpoint endpoint = new StatusesFilterEndpoint();
+            endpoint.followings(Collections.singletonList(2236553426L));
+            return endpoint;
+        }
+    }
+    private static boolean isValidJson(String twitterStr){
+        try{
+            new JSONObject(twitterStr);
+            return true;
+        }catch (JSONException e){
+            return false;
+        }
+    }
 }
 
 
