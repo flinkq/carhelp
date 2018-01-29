@@ -7,7 +7,7 @@ import com.incident.twitter.service.LocationService;
 import com.incident.twitter.service.impl.GoogleLocationService;
 import com.incident.twitter.util.ElasticUtils;
 import com.incident.twitter.util.ObjectMapperFactory;
-import com.incident.twitter.util.SlackAppender;
+import com.incident.twitter.util.SlackNotifier;
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.endpoint.StreamingEndpoint;
 import org.apache.flink.api.common.typeinfo.TypeHint;
@@ -54,10 +54,11 @@ public class Worker
 	TwitterSource source = new TwitterSource(props);
 	source.setCustomEndpointInitializer(new TMCLebanonFilter());
 	DataStream<String> streamSource = env.addSource(source);
-	streamSource.print();
+//	streamSource.print();
 	//filters
 	SplitStream<JSONObject> twitterSplitStream = streamSource
 			.filter(twitterStr -> twitterStr != null && !twitterStr.trim().isEmpty() && isValidJson(twitterStr))
+            .filter(twitterStr -> !twitterStr.contains("retweeted_status"))
 			.map(twitterStr -> new JSONObject(twitterStr))
 			.filter(twitterJson -> twitterJson.optLong("timestamp_ms") != 0)
 			//we have good tweets here
@@ -74,14 +75,20 @@ public class Worker
 	//
 	DataStream<Tweet> enrichedStream = twitterSplitStream
 			.select("enriched")
-			.map(TweetFactory::build); //building tweet
-	enrichedStream.print();
-
-	enrichedStream.filter(tweet -> tweet.getHashtags().contains("كفانا_بقى") || tweet.getText().contains("كفانا_بقى")) //this hashtag means accident
+			.map(TweetFactory::build) //building tweet
+	        .filter(tweet -> tweet.getHashtags().contains("كفانا_بقى")
+                    || tweet.getText().contains("كفانا_بقى")
+                    || tweet.getText().contains("تصادم")
+                    || tweet.getText().contains("حادث")) //this hashtag means accident
 			.map(tweet -> getLocations(tweet))
 			//we got the ones with location
 			.map(tweet -> {
-			    tweet.getAccidentLocaiton().ifPresent(location -> SlackAppender.append("Detected location " + location.getName()));
+			    tweet.getAccidentLocaiton().ifPresent(location -> {
+			    	SlackNotifier.notify("Detected at " + location.getName());
+			    	try{
+//						TwilioNotifier.notify("Detected accident at " + location.getName() + ", " + location.getCountry());
+					}catch (Exception e){}
+				});
 			    return tweet;
 			});
 
@@ -97,11 +104,12 @@ public class Worker
     {
 	logger.debug("Getting locations for tweet");
 	LocationService locationService = GoogleLocationService.getInstance();
-	tweet.getHashtags().stream().map(locationService::detectLocation)
+	tweet.getHashtags().stream().map(hashtag -> locationService.detectLocation(tweet.getTwitterProfile().getCountry(), hashtag))
 			.filter(Optional::isPresent)
 			.findAny()
 			.map(Optional::get)
 			.ifPresent(tweet::setAccidentLocaiton);
+	tweet.getAccidentLocaiton().ifPresent(location -> logger.debug("Found accident location " + location.getName()));
 	return tweet;
     }
 
@@ -116,7 +124,7 @@ public class Worker
 
 	    @Override public String getKeyFromData(JSONObject tweet)
 	    {
-		return "sm:flink:tweets:raw";
+		return "queue:tweets:raw";
 	    }
 
 	    @Override public String getValueFromData(JSONObject tweet)
@@ -137,7 +145,7 @@ public class Worker
 
 	    @Override public String getKeyFromData(Tweet tweet)
 	    {
-		StringBuilder key = new StringBuilder("sm:flink:tweets:enriched:" + tweet.getTwitterProfile().getHandle());
+		StringBuilder key = new StringBuilder("queue:tweets:enriched:" + tweet.getTwitterProfile().getHandle());
 		tweet.getAccidentLocaiton().ifPresent(location -> key.append(":").append(location.getName()));
 		return key.toString();
 	    }

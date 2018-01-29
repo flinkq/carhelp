@@ -58,7 +58,7 @@ public class TweetFactory
 		tweet = twitterJson.getJSONObject("extended_tweet").getString("full_text").trim();
 	    } catch (JSONException e)
 	    {
-		tweet = twitterJson.getString("full_text").trim();
+		tweet = twitterJson.getString("text").trim();
 	    }
 	}
 	return tweet;
