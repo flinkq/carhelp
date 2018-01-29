@@ -1,6 +1,6 @@
 package com.incident.twitter.util;
 
-import com.incident.twitter.sink.SimpleElasticSink;
+import com.incident.twitter.sink.TweetElasticSink;
 import org.apache.flink.streaming.connectors.elasticsearch5.ElasticsearchSink;
 
 import java.net.InetAddress;
@@ -21,7 +21,7 @@ public class ElasticUtils
 	config.put("bulk.flush.max.actions", "1");
 	List<InetSocketAddress> transportAddresses = new ArrayList<>();
 	transportAddresses.add(new InetSocketAddress(InetAddress.getByName(elasticHost), 9300));
-	return new ElasticsearchSink(config, transportAddresses, new SimpleElasticSink(index, type));
+	return new ElasticsearchSink(config, transportAddresses, new TweetElasticSink(index, type));
     }
 
 }
