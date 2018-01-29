@@ -1,5 +1,8 @@
 package com.incident.twitter.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
@@ -86,9 +89,17 @@ public class Tweet
 	this.accidentLocaiton = accidentLocaiton;
     }
 
-    @Override public String toString()
+    @Override
+    public String toString()
     {
-	return "Tweet{" + "createdAt=" + createdAt + ", id=" + id + ", text='" + text + '\'' + ", twitterProfile=" + twitterProfile + ", hashtags="
-			+ hashtags + ", accidentLocaiton=" + accidentLocaiton + '}';
+	try
+	{
+	    return new ObjectMapper().writeValueAsString(this);
+	} catch (JsonProcessingException e)
+	{
+	    e.printStackTrace();
+	    return "Tweet{" + "createdAt=" + createdAt + ", id=" + id + ", text='" + text + '\'' + ", twitterProfile=" + twitterProfile + ", hashtags="
+			    + hashtags + ", accidentLocaiton=" + accidentLocaiton + '}';
+	}
     }
 }
