@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 public class TwitterProfileFactory {
     public static TwitterProfile build(JSONObject tweetJson){
-        TwitterProfile twitterProfile = new TwitterProfile(parseId(tweetJson), parseHandle(tweetJson));
+        TwitterProfile twitterProfile = new TwitterProfile(parseId(tweetJson), parseHandle(tweetJson), "لبنان");
         return twitterProfile;
     }
     private static Long parseId(JSONObject tweetJson){

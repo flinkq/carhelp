@@ -1,4 +1,4 @@
-package com.incident.twitter.model;
+package com.incident.twitter.dto;
 
 import java.util.List;
 

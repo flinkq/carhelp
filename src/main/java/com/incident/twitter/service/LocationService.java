@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface LocationService
 {
     Optional<Location> detectLocation(String hashtag);
+    Optional<Location> detectLocation(String parentLocation, String hashtag);
 }

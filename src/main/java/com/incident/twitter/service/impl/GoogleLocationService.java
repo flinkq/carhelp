@@ -58,7 +58,12 @@ public class GoogleLocationService implements LocationService
 	scheduler.scheduleAtFixedRate(task, 0, 24, TimeUnit.HOURS);
     }
 
-    @Override public Optional<Location> detectLocation(String hashtag)
+	@Override
+	public Optional<Location> detectLocation(String parentLocation, String hashtag) {
+		return detectLocation(hashtag + " " + parentLocation);
+	}
+
+	@Override public Optional<Location> detectLocation(String hashtag)
     {
         logger.info("Detecting location for " + hashtag);
         Optional<Location> result = Optional.empty();
