@@ -1,29 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d7e7be38-4fae-4507-9ebf-a612cfbd43ba" name="Default" comment="Elastic Sink fixes">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_twilio_sdk_twilio_7_17_0.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_jsonwebtoken_jjwt_0_4.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_activation_activation_1_1.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_xml_bind_jaxb_api_2_2.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__javax_xml_stream_stax_api_1_0_2.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_karaf_decanter_org_apache_karaf_decanter_kibana_4_x_1_5_0_SNAPSHOT.xml" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_karaf_decanter_org_apache_karaf_decanter_kibana_4_x_1_5_0_SNAPSHOT.xml" />
+    <list default="true" id="d7e7be38-4fae-4507-9ebf-a612cfbd43ba" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/car-accidents.iml" afterPath="$PROJECT_DIR$/car-accidents.iml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/incident/twitter/core/Worker.java" afterPath="$PROJECT_DIR$/src/main/java/com/incident/twitter/core/Worker.java" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/incident/twitter/core/Worker$1.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/incident/twitter/core/Worker$2.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/incident/twitter/core/Worker$3.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/incident/twitter/core/Worker$TMCLebanonFilter.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/incident/twitter/core/Worker.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/incident/twitter/model/Location.class" afterPath="$PROJECT_DIR$/target/classes/com/incident/twitter/model/Location.class" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/incident/twitter/model/Tweet.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/incident/twitter/model/TweetFactory.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/incident/twitter/model/TwitterProfile.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/incident/twitter/model/TwitterProfileFactory.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/incident/twitter/service/LocationService.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/incident/twitter/service/impl/GoogleLocationService.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/target/classes/log4j.properties" afterPath="$PROJECT_DIR$/target/classes/log4j.properties" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -43,7 +22,7 @@
       <file leaf-file-name="Worker.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/incident/twitter/core/Worker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="346">
+            <state relative-caret-position="680">
               <caret line="40" column="26" lean-forward="false" selection-start-line="40" selection-start-column="26" selection-end-line="40" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -508,7 +487,7 @@
       <workItem from="1516617858320" duration="942000" />
       <workItem from="1516741955380" duration="3015000" />
       <workItem from="1517161686248" duration="5695000" />
-      <workItem from="1517250631309" duration="1486000" />
+      <workItem from="1517250631309" duration="1619000" />
     </task>
     <task id="LOCAL-00001" summary="Added mapping to tweet model">
       <created>1516528569455</created>
@@ -566,15 +545,21 @@
       <option name="project" value="LOCAL" />
       <updated>1517166936169</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="added filter retweets">
+      <created>1517252142494</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1517252142494</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="51022000" />
+    <option name="totallyTimeSpent" value="51155000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1431" y="-4" width="1615" height="1054" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
@@ -591,7 +576,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17832817" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17832817" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Google Cloud Storage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -624,7 +609,8 @@
     <MESSAGE value="Parametrized host and cluster name" />
     <MESSAGE value="Parametrized elastic connection" />
     <MESSAGE value="Working version" />
-    <option name="LAST_COMMIT_MESSAGE" value="Working version" />
+    <MESSAGE value="added filter retweets" />
+    <option name="LAST_COMMIT_MESSAGE" value="added filter retweets" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -991,7 +977,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/incident/twitter/core/Worker.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="346">
+        <state relative-caret-position="680">
           <caret line="40" column="26" lean-forward="false" selection-start-line="40" selection-start-column="26" selection-end-line="40" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
