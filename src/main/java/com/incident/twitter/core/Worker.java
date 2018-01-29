@@ -10,6 +10,7 @@ import com.incident.twitter.util.ObjectMapperFactory;
 import com.incident.twitter.util.SlackNotifier;
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.endpoint.StreamingEndpoint;
+import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.utils.ParameterTool;
@@ -42,8 +43,8 @@ public class Worker
     public static void main(String[] args) throws Exception
     {
 	ParameterTool params = ParameterTool.fromArgs(args);
-
 	StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+	env.getConfig().setGlobalJobParameters(params);
 
 	Properties props = new Properties();
 	props.setProperty(TwitterSource.CONSUMER_KEY, "PNB7I9WfZHiCgSIl0RfZZ9Eqv");
@@ -54,13 +55,21 @@ public class Worker
 	TwitterSource source = new TwitterSource(props);
 	source.setCustomEndpointInitializer(new TMCLebanonFilter());
 	DataStream<String> streamSource = env.addSource(source);
-//	streamSource.print();
+	streamSource.print();
 	//filters
 	SplitStream<JSONObject> twitterSplitStream = streamSource
 			.filter(twitterStr -> twitterStr != null && !twitterStr.trim().isEmpty() && isValidJson(twitterStr))
-            .filter(twitterStr -> !twitterStr.contains("retweeted_status"))
-			.map(twitterStr -> new JSONObject(twitterStr))
-			.filter(twitterJson -> twitterJson.optLong("timestamp_ms") != 0)
+			//Evaluates a boolean function for each element and retains those for which the function returns true.
+			.filter(new FilterFunction<String>()
+			{
+			    @Override public boolean filter(String twitterStr) throws Exception
+			    {
+				if (params.getBoolean("save.retweets", false))
+				    return true;
+				else
+				    return !twitterStr.contains("retweeted_status");
+			    }
+			}).map(twitterStr -> new JSONObject(twitterStr)).filter(twitterJson -> twitterJson.optLong("timestamp_ms") != 0)
 			//we have good tweets here
 			.split(new OutputSelector<JSONObject>()
 			{
@@ -73,22 +82,21 @@ public class Worker
 			    }
 			});
 	//
-	DataStream<Tweet> enrichedStream = twitterSplitStream
-			.select("enriched")
-			.map(TweetFactory::build) //building tweet
-	        .filter(tweet -> tweet.getHashtags().contains("كفانا_بقى")
-                    || tweet.getText().contains("كفانا_بقى")
-                    || tweet.getText().contains("تصادم")
-                    || tweet.getText().contains("حادث")) //this hashtag means accident
+	DataStream<Tweet> enrichedStream = twitterSplitStream.select("enriched").map(TweetFactory::build) //building tweet
+			.filter(tweet -> tweet.getHashtags().contains("كفانا_بقى") || tweet.getText().contains("كفانا_بقى") || tweet.getText()
+					.contains("تصادم") || tweet.getText().contains("حادث")) //this hashtag means accident
 			.map(tweet -> getLocations(tweet))
 			//we got the ones with location
 			.map(tweet -> {
 			    tweet.getAccidentLocaiton().ifPresent(location -> {
-			    	SlackNotifier.notify("Detected at " + location.getName());
-			    	try{
-//						TwilioNotifier.notify("Detected accident at " + location.getName() + ", " + location.getCountry());
-					}catch (Exception e){}
-				});
+				SlackNotifier.notify("Detected at " + location.getName());
+				try
+				{
+				    //TwilioNotifier.notify("Detected accident at " + location.getName() + ", " + location.getCountry());
+				} catch (Exception e)
+				{
+				}
+			    });
 			    return tweet;
 			});
 
@@ -105,10 +113,7 @@ public class Worker
 	logger.debug("Getting locations for tweet");
 	LocationService locationService = GoogleLocationService.getInstance();
 	tweet.getHashtags().stream().map(hashtag -> locationService.detectLocation(tweet.getTwitterProfile().getCountry(), hashtag))
-			.filter(Optional::isPresent)
-			.findAny()
-			.map(Optional::get)
-			.ifPresent(tweet::setAccidentLocaiton);
+			.filter(Optional::isPresent).findAny().map(Optional::get).ifPresent(tweet::setAccidentLocaiton);
 	tweet.getAccidentLocaiton().ifPresent(location -> logger.debug("Found accident location " + location.getName()));
 	return tweet;
     }
