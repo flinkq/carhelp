@@ -5,10 +5,9 @@ public class TwitterProfile {
     private String handle;
     private String country;
 
-    public TwitterProfile(Long id, String handle, String country) {
+    public TwitterProfile(Long id, String handle) {
         setId(id);
         setHandle(handle);
-        setCountry(country);
     }
 
     public Long getId() {

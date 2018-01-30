@@ -10,7 +10,7 @@ public class SlackSink extends RichSinkFunction<Tweet>
     @Override public void invoke(Tweet entity) throws Exception
     {
 	entity.getAccidentLocaiton().ifPresent(location -> {
-	    SlackNotifier.notify("Detected at " + location.getName());
+	    SlackNotifier.notify("Detected " + entity.getId() + " at " + location.getName());
 	    try
 	    {
 		//TwilioNotifier.notify("Detected accident at " + location.getName() + ", " + location.getCountry());
