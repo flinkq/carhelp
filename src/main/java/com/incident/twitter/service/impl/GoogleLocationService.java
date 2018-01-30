@@ -33,7 +33,7 @@ public class GoogleLocationService implements LocationService
 
     private GoogleLocationService(ParameterTool params)
     {
-//	init(params);
+	//	init(params);
     }
 
     public static GoogleLocationService getInstance()
@@ -58,27 +58,26 @@ public class GoogleLocationService implements LocationService
 	scheduler.scheduleAtFixedRate(task, 0, 24, TimeUnit.HOURS);
     }
 
-	@Override
-	public Optional<Location> detectLocation(String parentLocation, String hashtag) {
-		return detectLocation(hashtag + " " + parentLocation);
-	}
-
-	@Override public Optional<Location> detectLocation(String hashtag)
+    @Override public Optional<Location> detectLocation(String parentLocation, String hashtag)
     {
-        logger.info("Detecting location for " + hashtag);
-        Optional<Location> result = Optional.empty();
-        if(isLocation(hashtag))
+	return detectLocation(hashtag + " " + parentLocation);
+    }
+
+    @Override public Optional<Location> detectLocation(String hashtag)
+    {
+	logger.info("Detecting location for " + hashtag);
+	Optional<Location> result = Optional.empty();
+	if (isLocation(hashtag))
 	{
 	    String location = getFromCache(hashtag);
 	    if (location == null)
 	    {
 		logger.info(hashtag + " not found in cache... calling google");
-
-			try
+		try
 		{
-			GeocodingResult[] results = requestLocationFromGoogle(hashtag);
-			location = gson.toJson(results[0]);
-			setInCache(hashtag, location);
+		    GeocodingResult[] results = requestLocationFromGoogle(hashtag);
+		    location = gson.toJson(results[0]);
+		    setInCache(hashtag, location);
 		} catch (Exception exc)
 		{
 		    addBadLocation(hashtag);
@@ -88,49 +87,52 @@ public class GoogleLocationService implements LocationService
 	    {
 		logger.info("Found " + hashtag + " in cache");
 	    }
-	    if (location != null){
-			try
-			{
-				result = Optional.of(toLocation(location, hashtag));
-				logger.info("Found " + result.get().getName() + " in " + result.get().getCountry());
-			} catch (JSONException e)
-			{
-				logger.error("Could not parse google location response for " + hashtag + " : " + location, e);
-			}
+	    if (location != null)
+	    {
+		try
+		{
+		    result = Optional.of(toLocation(location, hashtag));
+		    logger.info("Found " + result.get().getName() + " in " + result.get().getCountry());
+		} catch (JSONException e)
+		{
+		    logger.error("Could not parse google location response for " + hashtag + " : " + location, e);
 		}
-	}else
+	    }
+	} else
 	{
 	    logger.info("Bad location " + hashtag);
 	}
 	return result;
     }
-	private GeocodingResult[] requestLocationFromGoogle(String hashtag) throws InterruptedException, ApiException, IOException {
-		GeoApiContext context = new GeoApiContext.Builder().apiKey("AIzaSyD-IsobBghjtWs6N7dv9s8iip9ZBpTLGek").build();
-		GeocodingResult[] results = GeocodingApi.geocode(context, hashtag).language("ar").await();
-		logger.trace("Got response for " + hashtag + " " + gson.toJson(results));
-		return results;
-	}
+
+    private GeocodingResult[] requestLocationFromGoogle(String hashtag) throws InterruptedException, ApiException, IOException
+    {
+	GeoApiContext context = new GeoApiContext.Builder().apiKey("AIzaSyD-IsobBghjtWs6N7dv9s8iip9ZBpTLGek").build();
+	GeocodingResult[] results = GeocodingApi.geocode(context, hashtag).language("ar").region("lb").await();
+	logger.trace("Got response for " + hashtag + " " + gson.toJson(results));
+	return results;
+    }
+
     private Location toLocation(String response, String hashtag)
     {
-        logger.debug("Parsing location response " + response);
+	logger.debug("Parsing location response " + response);
 	JSONObject locationJson = new JSONObject(response);
 	String country = "";
 	Double longitude;
 	Double latitude;
-	for (Object addressComponent : locationJson.getJSONArray("addressComponents") ){
-	JSONObject addressComponentJson = (JSONObject) addressComponent;
-	List<Object> types = addressComponentJson.getJSONArray("types").toList();
-	if (types.stream().anyMatch(type -> type.equals("COUNTRY")))
+	for (Object addressComponent : locationJson.getJSONArray("addressComponents"))
 	{
-	    country = addressComponentJson.getString("longName");
+	    JSONObject addressComponentJson = (JSONObject) addressComponent;
+	    List<Object> types = addressComponentJson.getJSONArray("types").toList();
+	    if (types.stream().anyMatch(type -> type.equals("COUNTRY")))
+	    {
+		country = addressComponentJson.getString("longName");
+	    }
 	}
-    }
-    JSONObject geometryLocation = locationJson.getJSONObject("geometry")
-		    .getJSONObject("location");
-    longitude = geometryLocation
-		    .getDouble("lng");
-    latitude = geometryLocation.getDouble("lat");
-    return new Location(hashtag, country, latitude, longitude);
+	JSONObject geometryLocation = locationJson.getJSONObject("geometry").getJSONObject("location");
+	longitude = geometryLocation.getDouble("lng");
+	latitude = geometryLocation.getDouble("lat");
+	return new Location(hashtag, country, latitude, longitude);
     }
 
     private boolean isLocation(String hashtag)
@@ -144,7 +146,8 @@ public class GoogleLocationService implements LocationService
 	{
 	    exc.printStackTrace();
 	}
-	if(!isLocation){
+	if (!isLocation)
+	{
 	    logger.debug(hashtag + " is not a valid location");
 	}
 	return isLocation;
@@ -163,7 +166,7 @@ public class GoogleLocationService implements LocationService
 
     private void setInCache(String hashtag, String location)
     {
-        logger.debug("Adding to cache " + hashtag);
+	logger.debug("Adding to cache " + hashtag);
 	try (Jedis jedis = new Jedis())
 	{
 	    jedis.hset("cache:location", hashtag, location);

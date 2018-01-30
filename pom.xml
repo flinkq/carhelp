@@ -290,8 +290,8 @@ under the License.
                                     <exclude>com.data-artisans:flakka-actor_*</exclude>
                                     <exclude>com.data-artisans:flakka-remote_*</exclude>
                                     <exclude>com.data-artisans:flakka-slf4j_*</exclude>
-                                    <exclude>io.netty:netty-all</exclude>
-                                    <exclude>io.netty:netty</exclude>
+                                    <!--<exclude>io.netty:netty-all</exclude>-->
+                                    <!--<exclude>io.netty:netty</exclude>-->
                                     <exclude>commons-fileupload:commons-fileupload</exclude>
                                     <exclude>org.apache.avro:avro</exclude>
                                     <exclude>commons-collections:commons-collections</exclude>
