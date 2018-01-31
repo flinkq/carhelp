@@ -40,10 +40,10 @@ public class Worker
 	/////////////////////////////////////////
 	//adding props TODO should be from params
 	Properties props = new Properties();
-	props.setProperty(TwitterSource.CONSUMER_KEY, "PNB7I9WfZHiCgSIl0RfZZ9Eqv");
-	props.setProperty(TwitterSource.CONSUMER_SECRET, "dOyRZCdta5BGWwhGhjyfKQMV7fbT0Oi4Uifm8r82RnInpua45w");
-	props.setProperty(TwitterSource.TOKEN, "1283394614-QkF3rjFqU3JwSoththtl1pDdYRBK77gMwoJFiTZ");
-	props.setProperty(TwitterSource.TOKEN_SECRET, "d08V9Hwe7NnfdJB6tI8N6XjdXKS1rs5DItR5T8FDkb5qY");
+	props.setProperty(TwitterSource.CONSUMER_KEY, "3D0xIwXoDSkGnfL3bTAARKqBF");
+	props.setProperty(TwitterSource.CONSUMER_SECRET, "jN1wvvNK6AbRXZgJWa98ZMsBDflsR0H1B3zaYdxctbR6OoyFSC");
+	props.setProperty(TwitterSource.TOKEN, "1283394614-dq01NwcHWIxVYFgkZTtdrJapdyLJznpaLeJ5LOr");
+	props.setProperty(TwitterSource.TOKEN_SECRET, "fgZR4X7FQQH56PsbtZfNaiPajYOUrA185pgU9GTNbWOEu");
 	/////////////////////////////////////////
 	//adding twitter source
 	TwitterSource source = new TwitterSource(props);

@@ -58,11 +58,6 @@ public class GoogleLocationService implements LocationService
 	scheduler.scheduleAtFixedRate(task, 0, 24, TimeUnit.HOURS);
     }
 
-    @Override public Optional<Location> detectLocation(String parentLocation, String hashtag)
-    {
-	return detectLocation(hashtag + " " + parentLocation);
-    }
-
     @Override public Optional<Location> detectLocation(String hashtag)
     {
 	logger.info("Detecting location for " + hashtag);
@@ -77,7 +72,13 @@ public class GoogleLocationService implements LocationService
 		{
 		    GeocodingResult[] results = requestLocationFromGoogle(hashtag);
 		    location = gson.toJson(results[0]);
-		    setInCache(hashtag, location);
+		    if(isAccurateLocation(location)){
+                setInCache(hashtag, location);
+            }else{
+		        addBadLocation(hashtag);
+		        location = null;
+		        logger.debug(hashtag + " got partial match from google... not good enough!");
+            }
 		} catch (Exception exc)
 		{
 		    addBadLocation(hashtag);
@@ -108,7 +109,10 @@ public class GoogleLocationService implements LocationService
     private GeocodingResult[] requestLocationFromGoogle(String hashtag) throws InterruptedException, ApiException, IOException
     {
 	GeoApiContext context = new GeoApiContext.Builder().apiKey("AIzaSyD-IsobBghjtWs6N7dv9s8iip9ZBpTLGek").build();
-	GeocodingResult[] results = GeocodingApi.geocode(context, hashtag).language("ar").region("lb").await();
+	GeocodingResult[] results = GeocodingApi.geocode(context, hashtag)
+            .language("ar")
+            .region("lb")
+            .await();
 	logger.trace("Got response for " + hashtag + " " + gson.toJson(results));
 	return results;
     }
@@ -163,7 +167,10 @@ public class GoogleLocationService implements LocationService
 	    exc.printStackTrace();
 	}
     }
-
+    private boolean isAccurateLocation(String locationResponse){
+        JSONObject locationJson = new JSONObject(locationResponse);
+        return !locationJson.getBoolean("partialMatch");
+    }
     private void setInCache(String hashtag, String location)
     {
 	logger.debug("Adding to cache " + hashtag);

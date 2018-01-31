@@ -6,7 +6,7 @@ public class TwitterProfileFactory
 {
     public static TwitterProfile build(JSONObject tweetJson)
     {
-	TwitterProfile twitterProfile = new TwitterProfile(parseId(tweetJson), parseHandle(tweetJson), null);
+	TwitterProfile twitterProfile = new TwitterProfile(parseId(tweetJson), parseHandle(tweetJson));
 	return twitterProfile;
     }
 

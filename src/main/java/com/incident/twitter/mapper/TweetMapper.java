@@ -10,6 +10,6 @@ public class TweetMapper implements MapFunction<String, Tweet>
     @Override
     public Tweet map(String o) throws Exception
     {
-	return TweetFactory.build(new JSONObject(o));
+        return TweetFactory.build(new JSONObject(o));
     }
 }
