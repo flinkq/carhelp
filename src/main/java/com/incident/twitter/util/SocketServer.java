@@ -35,8 +35,9 @@ public class SocketServer implements Serializable
         Configuration config = new Configuration();
         //config.setHostname("142.44.243.86");
         config.setPort(9092);
-        config.setOrigin("*");
-        server = new SocketIOServer(config);
+	config.setOrigin("http://142.44.243.86:9092");
+	config.setAllowCustomRequests(true);
+	server = new SocketIOServer(config);
         //start server
         server.start();
 	LOGGER.info("Socket Server Started");
