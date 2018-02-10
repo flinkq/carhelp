@@ -36,9 +36,10 @@
     }
 
     // Function for adding a marker to the page.
-    function addMarker(location) {
+    function addMarker(location, label) {
         marker = new google.maps.Marker({
             position: location,
+            label: label,
             map: map
         });
     }
@@ -46,7 +47,7 @@
     // Testing the addMarker function
     function TestMarker() {
         CentralPark = new google.maps.LatLng(37.7699298, -122.4469157);
-        addMarker(CentralPark);
+        addMarker(CentralPark, 'Test Marker');
     }
 </script>
 <script async defer
@@ -61,9 +62,8 @@
     });
     function output(lat, lon, message) {
         position = new google.maps.LatLng(lat, lon);
-        addMarker(position);
+        addMarker(position, message);
     }
 </script>
-
 </body>
 </html>

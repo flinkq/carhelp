@@ -4,7 +4,9 @@ import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.incident.twitter.model.GoogleLocation;
 
-public class SocketServer
+import java.io.Serializable;
+
+public class SocketServer implements Serializable
 {
 
     private static SocketIOServer server;
@@ -46,7 +48,8 @@ public class SocketServer
         try
         {
             getInstance().getBroadcastOperations().sendEvent("locationEvent", object);
-        } catch (InterruptedException e)
+            System.out.println("location sent");
+        } catch (Exception e)
         {
             System.out.println("Exception sending broadcast");
             e.printStackTrace();

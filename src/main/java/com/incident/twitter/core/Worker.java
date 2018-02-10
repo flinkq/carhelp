@@ -56,7 +56,7 @@ public class Worker
 	/////////////////////////////////////////
 	DataStream<String> streamSource = env.addSource(source).filter(new TweetFilter());
 	//add retweet filter if needed
-	if(params.getBoolean("allowRetweets", true))
+	if(params.getBoolean("allowRetweets", false))
 	{
 	    System.out.println("Adding retweets filter");
 	    streamSource = streamSource.filter(new RetweetFilter());
