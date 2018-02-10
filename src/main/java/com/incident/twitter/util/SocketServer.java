@@ -28,7 +28,7 @@ public class SocketServer
     public static void init() throws InterruptedException
     {
         Configuration config = new Configuration();
-        config.setHostname("localhost");
+        config.setHostname("142.44.243.86");
         config.setPort(9092);
         server = new SocketIOServer(config);
         //start server

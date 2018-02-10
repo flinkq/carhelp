@@ -2,21 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d7e7be38-4fae-4507-9ebf-a612cfbd43ba" name="Default" comment="added socket broadcasting">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/incident/twitter/model/GoogleLocation.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/incident/twitter/ui/index.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/incident/twitter/util/SocketServer.java" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_buffer_4_1_6_Final.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_4_1_6_Final.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_http_4_1_6_Final.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_common_4_1_6_Final.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_handler_4_1_6_Final.xml" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_4_1_6_Final.xml" afterPath="" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/car-accidents.iml" afterPath="$PROJECT_DIR$/car-accidents.iml" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/incident/twitter/core/Worker.java" afterPath="$PROJECT_DIR$/src/main/java/com/incident/twitter/core/Worker.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/incident/twitter/sink/SlackSink.java" afterPath="$PROJECT_DIR$/src/main/java/com/incident/twitter/sink/SlackSink.java" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/incident/twitter/model/Tweet.class" afterPath="$PROJECT_DIR$/target/classes/com/incident/twitter/model/Tweet.class" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/incident/twitter/util/SocketServer.java" afterPath="$PROJECT_DIR$/src/main/java/com/incident/twitter/util/SocketServer.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,11 +20,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Worker.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Worker.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/incident/twitter/core/Worker.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="587">
-              <caret line="58" column="50" lean-forward="false" selection-start-line="58" selection-start-column="50" selection-end-line="58" selection-end-column="50" />
+            <state relative-caret-position="386">
+              <caret line="41" column="28" lean-forward="false" selection-start-line="41" selection-start-column="22" selection-end-line="41" selection-end-column="28" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -67,11 +54,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SocketServer.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="SocketServer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/incident/twitter/util/SocketServer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
-              <caret line="6" column="25" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="25" />
+            <state relative-caret-position="576">
+              <caret line="32" column="29" lean-forward="true" selection-start-line="32" selection-start-column="29" selection-end-line="32" selection-end-column="29" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -125,9 +112,15 @@
       <file leaf-file-name="GoogleLocationService.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/incident/twitter/service/impl/GoogleLocationService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="136" column="0" lean-forward="false" selection-start-line="136" selection-start-column="0" selection-end-line="136" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="414">
+              <caret line="140" column="0" lean-forward="false" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
+              <folding>
+                <marker date="1518275010887" expanded="true" signature="5263:5464" ph="{...}" />
+                <marker date="1518275010887" expanded="true" signature="5518:5685" ph="{...}" />
+                <marker date="1518275010887" expanded="true" signature="5745:6195" ph="{...}" />
+                <marker date="1518275010887" expanded="true" signature="5923:6004" ph="{...}" />
+                <marker date="1518275010887" expanded="true" signature="6036:6189" ph="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -135,8 +128,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/incident/twitter/ui/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="25" column="36" lean-forward="false" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
+            <state relative-caret-position="396">
+              <caret line="22" column="20" lean-forward="true" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -145,8 +138,8 @@
       <file leaf-file-name="SlackSink.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/incident/twitter/sink/SlackSink.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="14" column="75" lean-forward="false" selection-start-line="14" selection-start-column="67" selection-end-line="14" selection-end-column="75" />
+            <state relative-caret-position="234">
+              <caret line="15" column="15" lean-forward="false" selection-start-line="15" selection-start-column="15" selection-end-line="15" selection-end-column="15" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -226,8 +219,8 @@
         <option value="$PROJECT_DIR$/src/main/java/com/incident/twitter/ui/index.html" />
         <option value="$PROJECT_DIR$/src/main/java/com/incident/twitter/core/SocketServer.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/incident/twitter/model/GoogleLocation.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/incident/twitter/util/SocketServer.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/incident/twitter/core/Worker.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/incident/twitter/util/SocketServer.java" />
       </list>
     </option>
   </component>
@@ -710,7 +703,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="65502000" />
+    <option name="totallyTimeSpent" value="66584000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1431" y="-4" width="1615" height="1054" extended-state="6" />
@@ -721,10 +714,10 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3768769" sideWeight="0.50269026" order="5" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23101266" sideWeight="0.50216717" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297568" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23101266" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23101266" sideWeight="0.4978328" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3753754" sideWeight="0.49730977" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1029,10 +1022,10 @@
         <state relative-caret-position="144">
           <caret line="8" column="58" lean-forward="false" selection-start-line="8" selection-start-column="44" selection-end-line="8" selection-end-column="58" />
           <folding>
-            <element signature="e#362#363#0" expanded="false" />
-            <element signature="e#423#424#0" expanded="false" />
-            <element signature="e#490#491#0" expanded="false" />
-            <element signature="e#562#563#0" expanded="false" />
+            <element signature="e#356#357#0" expanded="false" />
+            <element signature="e#417#418#0" expanded="false" />
+            <element signature="e#484#485#0" expanded="false" />
+            <element signature="e#556#557#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1100,11 +1093,11 @@
         <state relative-caret-position="918">
           <caret line="87" column="5" lean-forward="false" selection-start-line="87" selection-start-column="5" selection-end-line="87" selection-end-column="5" />
           <folding>
-            <element signature="e#684#685#0" expanded="false" />
-            <element signature="e#709#710#0" expanded="false" />
-            <element signature="e#1081#1082#0" expanded="false" />
-            <element signature="e#1111#1112#0" expanded="false" />
-            <element signature="e#1679#1680#0" expanded="false" />
+            <element signature="e#686#687#0" expanded="false" />
+            <element signature="e#711#712#0" expanded="false" />
+            <element signature="e#1083#1084#0" expanded="false" />
+            <element signature="e#1113#1114#0" expanded="false" />
+            <element signature="e#1681#1682#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1137,8 +1130,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/incident/twitter/sink/SlackSink.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="14" column="75" lean-forward="false" selection-start-line="14" selection-start-column="67" selection-end-line="14" selection-end-column="75" />
+        <state relative-caret-position="234">
+          <caret line="15" column="15" lean-forward="false" selection-start-line="15" selection-start-column="15" selection-end-line="15" selection-end-column="15" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1147,17 +1140,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/incident/twitter/service/impl/GoogleLocationService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="136" column="0" lean-forward="false" selection-start-line="136" selection-start-column="0" selection-end-line="136" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/incident/twitter/ui/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="25" column="36" lean-forward="false" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
-          <folding />
+        <state relative-caret-position="414">
+          <caret line="140" column="0" lean-forward="false" selection-start-line="140" selection-start-column="0" selection-end-line="140" selection-end-column="0" />
+          <folding>
+            <marker date="1518275010887" expanded="true" signature="5263:5464" ph="{...}" />
+            <marker date="1518275010887" expanded="true" signature="5518:5685" ph="{...}" />
+            <marker date="1518275010887" expanded="true" signature="5745:6195" ph="{...}" />
+            <marker date="1518275010887" expanded="true" signature="5923:6004" ph="{...}" />
+            <marker date="1518275010887" expanded="true" signature="6036:6189" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1182,16 +1173,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/incident/twitter/util/SocketServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="25" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/incident/twitter/filter/RetweetFilter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
@@ -1200,10 +1181,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/incident/twitter/ui/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="22" column="20" lean-forward="true" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/incident/twitter/core/Worker.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="587">
-          <caret line="58" column="50" lean-forward="false" selection-start-line="58" selection-start-column="50" selection-end-line="58" selection-end-column="50" />
+        <state relative-caret-position="386">
+          <caret line="41" column="28" lean-forward="false" selection-start-line="41" selection-start-column="22" selection-end-line="41" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/incident/twitter/util/SocketServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="576">
+          <caret line="32" column="29" lean-forward="true" selection-start-line="32" selection-start-column="29" selection-end-line="32" selection-end-column="29" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
