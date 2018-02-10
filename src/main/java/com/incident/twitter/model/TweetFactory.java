@@ -5,7 +5,7 @@ import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class TweetFactory
@@ -62,7 +62,7 @@ public class TweetFactory
 
     private static Set<String> parseHashtags(JSONObject twitterJson)
     {
-	Set<String> hashtags = new HashSet<>();
+	Set<String> hashtags = new LinkedHashSet<>();
 	if (twitterJson.toString().contains("retweeted_status"))
 	{
 	    try

@@ -1,7 +1,7 @@
 package com.incident.twitter.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.incident.twitter.util.ObjectMapperFactory;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -94,7 +94,7 @@ public class Tweet
     {
 	try
 	{
-	    return new ObjectMapper().writeValueAsString(this);
+	    return ObjectMapperFactory.getObjectMapper().writeValueAsString(this);
 	} catch (JsonProcessingException e)
 	{
 	    e.printStackTrace();
