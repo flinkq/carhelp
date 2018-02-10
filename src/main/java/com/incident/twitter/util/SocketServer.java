@@ -30,7 +30,7 @@ public class SocketServer implements Serializable
     public static void init() throws InterruptedException
     {
         Configuration config = new Configuration();
-        config.setHostname("142.44.243.86");
+        config.setHostname("localhost");
         config.setPort(9092);
         server = new SocketIOServer(config);
         //start server
