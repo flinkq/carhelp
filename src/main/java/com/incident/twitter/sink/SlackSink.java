@@ -2,6 +2,7 @@ package com.incident.twitter.sink;
 
 import com.incident.twitter.model.Tweet;
 import com.incident.twitter.util.SlackNotifier;
+import com.incident.twitter.util.SocketServer;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 
@@ -11,6 +12,7 @@ public class SlackSink extends RichSinkFunction<Tweet>
     {
 	entity.getAccidentLocaiton().ifPresent(location -> {
 	    SlackNotifier.notify("Detected at " + location.getName());
+	    SocketServer.broadcastAccident(location.getLatitude(), location.getLongitude(), location.getName());
 	    try
 	    {
 		//TwilioNotifier.notify("Detected accident at " + location.getName() + ", " + location.getCountry());

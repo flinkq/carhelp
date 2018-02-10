@@ -10,6 +10,7 @@ import com.incident.twitter.service.impl.GoogleLocationService;
 import com.incident.twitter.sink.SimpleRedisSink;
 import com.incident.twitter.sink.SlackSink;
 import com.incident.twitter.util.ElasticUtils;
+import com.incident.twitter.util.SocketServer;
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.endpoint.StreamingEndpoint;
 import org.apache.flink.api.java.utils.ParameterTool;
@@ -34,6 +35,10 @@ public class Worker
 
     public static void main(String[] args) throws Exception
     {
+	////////////////////////////////////////
+        //init the socket server on port 9092
+	SocketServer.init();
+	////////////////////////////////////////
 	ParameterTool params = ParameterTool.fromArgs(args);
 	StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 	env.getConfig().setGlobalJobParameters(params);
@@ -50,6 +55,12 @@ public class Worker
 	source.setCustomEndpointInitializer(new TMCLebanonFilter());
 	/////////////////////////////////////////
 	DataStream<String> streamSource = env.addSource(source).filter(new TweetFilter());
+	//add retweet filter if needed
+	if(params.getBoolean("allowRetweets", true))
+	{
+	    System.out.println("Adding retweets filter");
+	    streamSource = streamSource.filter(new RetweetFilter());
+	}
 	streamSource.print();
 	/////////////////////////////////////////
 	//saving all data that is coming
@@ -57,7 +68,6 @@ public class Worker
 	/////////////////////////////////////////
 	//filters
 	DataStream<Tweet> accidentsStream = streamSource
-			.filter(new RetweetFilter())
 			.map(new TweetMapper())
 			.filter(new TMCAccidentsFilter())
 			.map(Worker::getLocations);

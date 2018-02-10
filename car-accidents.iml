@@ -113,13 +113,7 @@
     <orderEntry type="library" name="Maven: org.elasticsearch.plugin:transport-netty3-client:5.1.2" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty:3.10.6.Final" level="project" />
     <orderEntry type="library" name="Maven: org.elasticsearch.plugin:transport-netty4-client:5.1.2" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.1.6.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-codec:4.1.6.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-codec-http:4.1.6.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-common:4.1.6.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-handler:4.1.6.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-resolver:4.1.6.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.netty:netty-transport:4.1.6.Final" level="project" />
     <orderEntry type="library" name="Maven: org.elasticsearch.plugin:reindex-client:5.1.2" level="project" />
     <orderEntry type="library" name="Maven: org.elasticsearch.client:rest:5.1.2" level="project" />
     <orderEntry type="library" name="Maven: org.elasticsearch.plugin:lang-mustache-client:5.1.2" level="project" />
@@ -149,5 +143,13 @@
     <orderEntry type="library" name="Maven: javax.xml.bind:jaxb-api:2.2" level="project" />
     <orderEntry type="library" name="Maven: javax.xml.stream:stax-api:1.0-2" level="project" />
     <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
+    <orderEntry type="library" name="Maven: com.corundumstudio.socketio:netty-socketio:1.7.7" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.0.25.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-common:4.0.25.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-transport:4.0.25.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-handler:4.0.25.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec-http:4.0.25.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-codec:4.0.25.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.netty:netty-transport-native-epoll:4.0.25.Final" level="project" />
   </component>
 </module>

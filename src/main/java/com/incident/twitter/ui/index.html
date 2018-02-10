@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple markers</title>
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+         * element that contains the map. */
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script type="text/javascript">
+
+    // Standard google maps function
+    function initialize() {
+        var myLatlng = new google.maps.LatLng(33.890346, 35.530504);
+        var myOptions = {
+            zoom: 3,
+            center: myLatlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        map = new google.maps.Map(document.getElementById("map"), myOptions);
+        //TestMarker();
+    }
+
+    // Function for adding a marker to the page.
+    function addMarker(location) {
+        marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+    }
+
+    // Testing the addMarker function
+    function TestMarker() {
+        CentralPark = new google.maps.LatLng(37.7699298, -122.4469157);
+        addMarker(CentralPark);
+    }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmz62jXuFjo1lk_raI-1lDm46lLhJLeUE&callback=initialize">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script>
+    var socket =  io.connect('http://142.44.243.86:9092');
+    socket.on('locationEvent', function(data) {
+        output(data.lat, data.lon, data.message);
+    });
+    function output(lat, lon, message) {
+        position = new google.maps.LatLng(lat, lon);
+        addMarker(position);
+    }
+</script>
+
+</body>
+</html>
