@@ -3,12 +3,14 @@ package com.incident.twitter.util;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.incident.twitter.model.GoogleLocation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
 public class SocketServer implements Serializable
 {
-
+    static Logger LOGGER = LoggerFactory.getLogger(SocketServer.class);
     private static SocketIOServer server;
     private SocketServer(){}
 
@@ -29,13 +31,15 @@ public class SocketServer implements Serializable
 
     public static void init() throws InterruptedException
     {
+	LOGGER.info("Starting socket Server");
         Configuration config = new Configuration();
         //config.setHostname("142.44.243.86");
         config.setPort(9092);
         server = new SocketIOServer(config);
         //start server
         server.start();
-        //server.stop();
+	LOGGER.info("Socket Server Started");
+	//server.stop();
     }
 
     public static void broadcastAccident(double lat, double lon, String message)
@@ -44,15 +48,14 @@ public class SocketServer implements Serializable
         object.setMessage(message);
         object.setLat(lat);
         object.setLon(lon);
-        System.out.println("Sending locationEvent");
+	LOGGER.info("Sending locationEvent");
         try
         {
             getInstance().getBroadcastOperations().sendEvent("locationEvent", object);
-            System.out.println("location sent");
+	    LOGGER.info("location sent");
         } catch (Exception e)
         {
-            System.out.println("Exception sending broadcast");
-            e.printStackTrace();
+	    LOGGER.error("Exception sending broadcast", e);
         }
     }
 }

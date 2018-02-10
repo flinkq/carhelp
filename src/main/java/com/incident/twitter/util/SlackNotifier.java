@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SlackNotifier {
-    private static final Logger logger = LoggerFactory.getLogger(SlackNotifier.class);
+    static Logger LOGGER = LoggerFactory.getLogger(SlackNotifier.class);
 
     public static void notify(String message) {
         try{
@@ -19,7 +19,7 @@ public class SlackNotifier {
                     .bodyString(json.toString(), ContentType.APPLICATION_JSON)
                     .execute();
         }catch (Exception e){
-            logger.warn("Failed to send notification {}: {}", message, e.toString());
+            LOGGER.warn("Failed to send notification {}: {}", message, e.toString());
         }
     }
 }
