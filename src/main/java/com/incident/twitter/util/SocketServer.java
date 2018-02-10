@@ -1,6 +1,7 @@
 package com.incident.twitter.util;
 
 import com.corundumstudio.socketio.Configuration;
+import com.corundumstudio.socketio.SocketConfig;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.incident.twitter.model.GoogleLocation;
 import org.slf4j.Logger;
@@ -33,10 +34,13 @@ public class SocketServer implements Serializable
     {
 	LOGGER.info("Starting socket Server");
         Configuration config = new Configuration();
-        //config.setHostname("142.44.243.86");
+        config.setHostname("0.0.0.0");
         config.setPort(9092);
-	config.setOrigin("http://142.44.243.86:9092");
+//	config.setOrigin("http://142.44.243.86:9092");
 	config.setAllowCustomRequests(true);
+	SocketConfig socketConfig = config.getSocketConfig();
+	socketConfig.setReuseAddress(true);
+
 	server = new SocketIOServer(config);
         //start server
         server.start();
