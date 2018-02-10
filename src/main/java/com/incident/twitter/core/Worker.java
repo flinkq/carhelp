@@ -35,6 +35,7 @@ public class Worker
 
     public static void main(String[] args) throws Exception
     {
+	logger.info("Main method started!");
 	////////////////////////////////////////
         //init the socket server on port 9092
 	SocketServer.init();

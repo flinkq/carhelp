@@ -32,7 +32,7 @@ public class SocketServer implements Serializable
 
     public static void init() throws InterruptedException
     {
-	LOGGER.info("Starting socket Server");
+	LOGGER.warn("Starting socket Server");
         Configuration config = new Configuration();
         config.setHostname("0.0.0.0");
         config.setPort(9092);
