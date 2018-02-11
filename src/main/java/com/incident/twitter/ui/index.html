@@ -5,22 +5,53 @@
     <meta charset="utf-8">
     <title>Simple markers</title>
     <style>
-        /* Always set the map height explicitly to define the size of the div
-         * element that contains the map. */
-        #map {
-            height: 100%;
-            width: 100%;
-        }
-        /* Optional: Makes the sample page fill the window. */
-        html, body {
+        .parent, html, body {
             height: 100%;
             margin: 0;
-            padding: 0;
+        }
+
+        .parent {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .map {
+            flex: 7;
+        }
+
+        .second {
+            display: flex;
+            background: white;
+            flex: 1;
+        }
+
+        .list {
+            border: 3px solid cadetblue;
+            background: aliceblue;
+            flex: 10;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+
+        .title {
+            flex: 1;
+            border: 3px solid green;
         }
     </style>
 </head>
 <body>
-<div id="map"></div>
+<div class="parent">
+    <div id="map" , class="map"></div>
+    <div id="second" , class="second">
+        <div id="label", class="title"></div>
+        <div class="list">
+            <ul id="list">
+            </ul>
+        </div>
+    </div>
+</div>
+
+
 <script type="text/javascript">
 
     // Standard google maps function
@@ -32,11 +63,13 @@
             mapTypeId: google.maps.MapTypeId.ROADMAP
         }
         map = new google.maps.Map(document.getElementById("map"), myOptions);
-        //TestMarker();
+        TestMarker();
     }
 
     // Function for adding a marker to the page.
     function addMarker(location, label) {
+        document.getElementById('list').innerHTML = '<li>Accident in ' + label + document.getElementById('list').innerHTML + '</li>';
+
         marker = new google.maps.Marker({
             position: location,
             label: label,
@@ -56,13 +89,53 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script>
-    var socket =  io.connect('http://142.44.243.86:9092');
-    socket.on('locationEvent', function(data) {
+    var socket = io.connect('http://142.44.243.86:9092');
+    socket.on('locationEvent', function (data) {
         output(data.lat, data.lon, data.message);
     });
+
     function output(lat, lon, message) {
         position = new google.maps.LatLng(lat, lon);
         addMarker(position, message);
+    }
+</script>
+
+<script>
+    (function () {
+        function checkTime(i) {
+            return (i < 10) ? "0" + i : i;
+        }
+
+        function startTime() {
+            var weekday = new Array(7);
+            weekday[0] = "Sunday";
+            weekday[1] = "Monday";
+            weekday[2] = "Tuesday";
+            weekday[3] = "Wednesday";
+            weekday[4] = "Thursday";
+            weekday[5] = "Friday";
+            weekday[6] = "Saturday";
+
+
+
+            var today = new Date(),
+                h = checkTime(today.getHours()),
+                m = checkTime(today.getMinutes()),
+                s = checkTime(today.getSeconds());
+            document.getElementById('label').innerHTML = 'Live Coverage: </br></br>' + weekday[today.getDay()] + ' ' + h + ":" + m + ":" + s;
+            t = setTimeout(function () {
+                startTime()
+            }, 500);
+        }
+        startTime();
+    })();
+</script>
+
+<script>
+    function myFunction() {
+
+        var n = weekday[d.getDay()];
+        document.getElementById("demo").innerHTML = n;
     }
 </script>
 </body>
