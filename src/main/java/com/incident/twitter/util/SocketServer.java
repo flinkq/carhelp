@@ -56,7 +56,7 @@ public class SocketServer implements Serializable
 	LOGGER.warn("Starting socket Server");
 	Configuration config = new Configuration();
 	config.setPort(9092);
-
+	config.getSocketConfig().setReuseAddress(true);
 	server = new SocketIOServer(config);
 	server.addConnectListener(new ConnectListener()
 	{
@@ -90,6 +90,7 @@ public class SocketServer implements Serializable
 		removeUser(socketIOClient);
 	    }
 	});
+
 	server.start();
 	LOGGER.info("Socket Server Started");
 	//server.stop();
