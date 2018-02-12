@@ -1,0 +1,10 @@
+{
+  "name": "socket-car-accidents",
+  "version": "0.0.1",
+  "description": "pushes car accident events to map",
+  "dependencies": {
+    "express": "^4.15.2",
+    "redis": "^2.8.0",
+    "socket.io": "^2.0.4"
+  }
+}

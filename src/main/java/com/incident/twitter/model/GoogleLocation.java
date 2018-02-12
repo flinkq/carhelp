@@ -10,6 +10,13 @@ public class GoogleLocation
     {
     }
 
+    public GoogleLocation(String message, double lat, double lon)
+    {
+        this.message = message;
+        this.lat = lat;
+        this.lon = lon;
+    }
+
     public String getMessage()
     {
 	return message;

@@ -2,9 +2,10 @@ package com.incident.twitter.sink;
 
 import com.incident.twitter.model.Tweet;
 import com.incident.twitter.util.SlackNotifier;
-import com.incident.twitter.util.SocketServer;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
+import org.json.JSONObject;
+import redis.clients.jedis.Jedis;
 
 public class SlackSink extends RichSinkFunction<Tweet>
 {
@@ -12,9 +13,14 @@ public class SlackSink extends RichSinkFunction<Tweet>
     {
 	entity.getAccidentLocaiton().ifPresent(location -> {
 	    SlackNotifier.notify("Detected at " + location.getName());
-	    SocketServer.broadcastAccident(location.getLatitude(), location.getLongitude(), location.getName());
-	    try
+	    try(Jedis jedis = new Jedis())
 	    {
+		JSONObject json = new JSONObject();
+		json.put("lat", location.getLatitude());
+		json.put("lon", location.getLongitude());
+		json.put("message", location.getName());
+		jedis.publish("location", json.toString());
+		//SocketServer.broadcastAccident(location.getLatitude(), location.getLongitude(), location.getName());
 		//TwilioNotifier.notify("Detected accident at " + location.getName() + ", " + location.getCountry());
 	    } catch (Exception e)
 	    {

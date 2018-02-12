@@ -10,7 +10,6 @@ import com.incident.twitter.service.impl.GoogleLocationService;
 import com.incident.twitter.sink.SimpleRedisSink;
 import com.incident.twitter.sink.SlackSink;
 import com.incident.twitter.util.ElasticUtils;
-import com.incident.twitter.util.SocketServer;
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.endpoint.StreamingEndpoint;
 import org.apache.flink.api.java.utils.ParameterTool;
@@ -38,7 +37,7 @@ public class Worker
 	logger.info("Main method started!");
 	////////////////////////////////////////
         //init the socket server on port 9092
-	SocketServer.init();
+	//SocketServer.init();
 	////////////////////////////////////////
 	ParameterTool params = ParameterTool.fromArgs(args);
 	StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();

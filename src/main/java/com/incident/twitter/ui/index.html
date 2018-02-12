@@ -89,9 +89,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 <script>
-    var socket = io.connect('http://142.44.243.86:9092');
+    var socket = io.connect('http://142.44.243.86:3000');
+    //var socket = io.connect('http://localhost:3000');
     socket.on('locationEvent', function (data) {
-        output(data.lat, data.lon, data.message);
+        var obj = JSON.parse(data);
+        output(obj.lat, obj.lon, obj.message);
     });
 
     function output(lat, lon, message) {
